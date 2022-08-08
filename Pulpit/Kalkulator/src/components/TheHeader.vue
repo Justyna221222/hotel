@@ -7,6 +7,9 @@
             <router-link to="/windowSize" type="button" class="button">Rozmiar</router-link>
         </div>
         <div class="buttonFrame">
+            <router-link to="/windowProfile" type="button" class="button">Profile</router-link>
+        </div>        
+        <div class="buttonFrame">
             <router-link to="/windowVenner" type="button" class="button">Okleina</router-link>
         </div>
         <div class="buttonFrame">
@@ -20,6 +23,9 @@
         </div>
         <div class="buttonFrame">
             <router-link to="/windowDiffusers" type="button" class="button">Nawiewniki</router-link>
+        </div>
+        <div class="buttonFrame">
+            <router-link to="/windowBlind" type="button" class="button">Roleta</router-link>
         </div>
         <div class="buttonFrame">
             <router-link to="/summary" type="button" class="button">Podsumowanie</router-link>

@@ -8,6 +8,8 @@ import WindowVenner from './components/WindowVenner.vue';
 import WindowFrames from './components/WindowFrames.vue';
 import WindowMuntins from './components/WindowMuntins.vue';
 import WindowDiffusers from './components/WindowDiffusers.vue';
+import WindowProfile from './components/WindowProfile.vue';
+import WindowBlind from './components/WindowBlind.vue';
 import TheSummary from './components/TheSummary.vue';
 
 const router = createRouter({
@@ -23,6 +25,8 @@ const router = createRouter({
         {path: '/windowFrames', component: WindowFrames},
         {path: '/windowMuntins', component: WindowMuntins},      
         {path: '/windowDiffusers', component: WindowDiffusers}, 
+        {path: '/windowProfile', component: WindowProfile}, 
+        {path: '/windowBlind', component: WindowBlind}, 
         {path: '/summary', component: TheSummary}           
     ]
 });

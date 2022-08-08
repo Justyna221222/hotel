@@ -18,6 +18,7 @@
             <input type="radio" id="type1" value="jednostronna" v-model="winVenner">
             <img src='/images/jednostronna.jpg' alt="window glass" width="256" height="256">
             <p> Okleina jednostronna</p>
+            <p class="small"> Strona zewnętrzna - kolor, strona wewnętrzna - biała</p>
         </label>   
     </div>
     <div>
@@ -25,20 +26,22 @@
             <input type="radio" id="type2" value="dwustronna" v-model="winVenner">
             <img src='/images/dwustronna.jpg' alt="window glass" width="256" height="256">
             <p> Okleina dwustronna</p>
+            <p class="small"> Strona zewnętrzna i wewnętrzna w kolorze</p>
         </label>
     </div>
 </div>
 
-    <div>Cena okna na podstawie rozmiaru: {{ this.$store.state.winSizePrice }}</div>
+    <div>Cena okna na podstawie profili: {{ this.$store.state.winProfilePrice }}</div>
     <div>Okleina: {{ winVenner }} </div>
     <div>
-        <button @click="navigateToWinSize" type="button" class="previous">Poprzedni</button>
+        <button @click="navigateToWinProfile" type="button" class="previous">Poprzedni</button>
         <button @click="setWinVenner" type="button" class="next">Następny</button>
     </div>   
 </template>
 
 <script>
     import store from '../store/index.js';  // import the store
+    import { winPriceHSDoubleColor } from '../winPriceHSDoubleColor.js';
     export default {
         data() {
             return {
@@ -51,23 +54,45 @@
             setWinVenner() {
                 const windowVenner = this.winVenner;
                 const winSizePrice = this.$store.state.winSizePrice;
+                var winProfilePrice;
+                const winType = this.$store.state.winType;
+                const wWidth = this.$store.state.width;
+                const wHeight = this.$store.state.height;
+                if(winType == 'Drzwi PSK + FIX' || winType == 'Drzwi PSK + FIX Perfectherm') {
+                    winProfilePrice = winSizePrice;
+                } else {
+                    winProfilePrice = this.$store.state.winProfilePrice;
+                } 
                 if(windowVenner == '') {
                     this.inputIsInvalid = true;
                     return;
+                } else if(winType == 'Drzwi HS' && windowVenner == 'jednostronna') {
+                    const winVennerPrice = winSizePrice;
+                    this.$store.commit('setWinVennerPrice', winVennerPrice);
+                } else if(winType == 'Drzwi HS' && windowVenner == 'dwustronna') {
+                    const winVennerPrice = winPriceHSDoubleColor(wWidth, wHeight);
+                    this.$store.commit('setWinVennerPrice', winVennerPrice);                
                 } else if(windowVenner == 'jednostronna') {
-                    const winVennerPrice = Math.round((winSizePrice * 1.25) * 100) / 100;
+                    const winVennerPrice = (Math.round((winSizePrice * 0.25) * 100) / 100) + winProfilePrice;
                     this.$store.commit('setWinVennerPrice', winVennerPrice);
                 } else if (windowVenner == 'dwustronna') {
-                    const winVennerPrice = Math.round((winSizePrice * 1.44) * 100) / 100;
+                    const winVennerPrice = (Math.round((winSizePrice * 0.44) * 100) / 100) + winProfilePrice;
                     this.$store.commit('setWinVennerPrice', winVennerPrice);
                 } else {
                     return 0;
                 }
-                this.$store.commit('setWinVenner', windowVenner);
-                this.$router.push('/windowGlass');
+                if(winType == 'Drzwi HS') {
+                    this.$store.commit('setWinGlass', 'dwukomorowe');
+                    this.$store.commit('setWinVenner', windowVenner);
+                    this.$router.push('/windowFrames');                    
+                } else {
+                    this.$store.commit('setWinVenner', windowVenner);
+                    this.$router.push('/windowGlass');                    
+                }
+
             },
-            navigateToWinSize() {
-                this.$router.push("/windowSize");
+            navigateToWinProfile() {
+                this.$router.push("/windowProfile");
             },
             confrimError() {
                 this.inputIsInvalid = false;
@@ -75,7 +100,9 @@
         },
             beforeRouteEnter(to, from, next){
                 const winWidth = store.state.width;
-                    next(winWidth !== '');
+                const winHeight = store.state.height;
+                const winType = store.state.winType;
+                    next(winType !=='' && winType !== 'Drzwi jednoskrzydłowe 1' && winType !== 'Drzwi jednoskrzydłowe 2' && winType !== 'Drzwi dwuskrzydłowe PVC' && winHeight !=='' && winWidth !== '');
             }
     }
 
@@ -113,6 +140,15 @@ label {
 /* CHECKED STYLES */
 [type=radio]:checked + img {
   outline: 3px solid red;
+}
+label p {
+    padding: 0;
+    margin: 0;
+}
+.small {
+    font-size: 15px;
+    padding: 0;
+    margin: 0;
 }
 .previous {
     float: left;

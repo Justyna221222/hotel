@@ -80,12 +80,23 @@
                 const winGlass = this.$store.state.winGlass;
                 this.winGlass = winGlass;
                 const area = this.$store.state.winArea;
-                const winGlassPrice = this.$store.state.winGlassPrice;
+                const winType = this.$store.state.winType;
+                const winGlassPrice = this.$store.state.winGlassPrice;                    
+
                 if(winFrames == ''){
                     this.inputIsInvalid = true;
                     return;
-                }
-                else if(winGlass == 'jednokomorowe') {
+                } else if(winType == 'Drzwi HS' && winGlass == 'jednokomorowe') {
+                    const winGlassPrice = this.$store.state.winVennerPrice;
+                    const winFramesPrice = winFramesPriceSingle(area, winFrames, winGlassPrice);
+                    this.$store.commit('setWinFramePrice', winFramesPrice);
+                    this.winFramesPrice = winFramesPrice;
+                } else if(winType == 'Drzwi HS' && winGlass == 'dwukomorowe') {
+                    const winGlassPrice = this.$store.state.winVennerPrice;
+                    const winFramesPrice = winFramesPriceDouble(area, winFrames, winGlassPrice);
+                    this.$store.commit('setWinFramePrice', winFramesPrice);
+                    this.winFramesPrice = winFramesPrice;
+                } else if(winGlass == 'jednokomorowe') {
                     const winFramesPrice = winFramesPriceSingle(area, winFrames, winGlassPrice);
                     this.$store.commit('setWinFramePrice', winFramesPrice);
                     this.winFramesPrice = winFramesPrice;                  
@@ -108,7 +119,16 @@
         },
         beforeRouteEnter(to, from, next){
                 const winGlass = store.state.winGlass;
-                next(winGlass !== '');
+                const winType = store.state.winType;
+                var letIn;
+                if(winGlass == '' && winType == 'Drzwi HS') {
+                    letIn = true;
+                } else if(winGlass == '') {
+                    letIn = false;
+                } else {
+                    letIn = true;
+                }         
+                next( letIn);
             }
     };
 </script>

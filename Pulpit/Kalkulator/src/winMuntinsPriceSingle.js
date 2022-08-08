@@ -5,11 +5,14 @@ export function winMuntinsPriceSingle(winMuntins, winType, winWidth, winHeight, 
     if(winType == "fix w ramie" || winType == "rozwierne" || winType == "Uchylne" || winType == "Rozwierno-uchylne") {
         muntinArea = 4;
         muntinLength = winWidth + winHeight;
-    } else if(winType == "Rozwierne + rozwierno-uchylne" || winType == "Rozweirno-uchylne + FIX" || winType == "Stałe FIX + FIX") {
+    } else if(winType == "Rozwierne + rozwierno-uchylne" || winType == "Rozweirno-uchylne + FIX" || winType == "Stałe FIX + FIX" || winType == 'Uchylne + rozwierno-uchylne') {
         muntinArea = 8;
         muntinLength = winWidth + (2 * winHeight);
     } else if(winType == "Rozwierne + rozwierne + rozwierno-uchylne" || winType == "Stałe FIX + FIX + FIX") {
         muntinArea = 12;
+        muntinLength = winWidth + (3 * winHeight);
+    } else if(winType == "Rozwierne + rozwierno-uchylne x 2") {
+        muntinArea = 16;
         muntinLength = winWidth + (3 * winHeight);
     } else {
        muntinArea = 0;

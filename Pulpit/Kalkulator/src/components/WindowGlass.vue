@@ -11,7 +11,7 @@
         <p> Wprowadź typ szyby</p>
     </div>
     <div class="choose">
-    <div>
+    <div v-if="glassAccepted">
         <label class="shadow p-3 mb-5 bg-white rounded">
             <input type="radio" id="jednokomorowe" value="jednokomorowe" v-model="windowGlass">
             <img src='/images/glass2.jpg' alt="window glass" width="256" height="256">
@@ -25,6 +25,10 @@
             <p> Dwukomorowe</p>
         </label>
     </div>
+
+</div>
+<div v-if="!glassAccepted">
+    <p>Profil {{ this.$store.state.winProfile }} jest dostępny wyłącznie z pakietem dwukomorowym</p>
 </div>
 <div>Cena okna z okleiną: {{ this.$store.state.winVennerPrice }}</div>
 <div>
@@ -42,6 +46,16 @@
                 area:'',
                 inputIsInvalid: false
             };
+        },
+        computed: {
+            glassAccepted() {
+                const winProfile = this.$store.state.winProfile;
+                if(winProfile == "schuco" || winProfile == "veka" || winProfile == "aluplast" || winProfile == "sonarol") {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
         },
         methods: {
             setGlass() {
@@ -73,7 +87,8 @@
         },
         beforeRouteEnter(to, from, next){
                 const winVenner = store.state.winVenner;
-                next(winVenner !== '');
+                const winType = store.state.winType;
+                next(winVenner !== '' && winType !== 'Drzwi HS');
             }
     };
 </script>

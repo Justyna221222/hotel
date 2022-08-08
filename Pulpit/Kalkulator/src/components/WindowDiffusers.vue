@@ -228,11 +228,13 @@
                 </div>                       
         </label>         
 </div>              
-
+<div class="brookvent">
+    <p>W ofercie mamy także nawiewniki firmy <strong>Brookvent</strong>. Więcej informacji pod numerem telefonu: +48 662 320 792</p>
+</div>
 <div>Cena okna po uwzględnieniu szpros: {{ this.$store.state.winMuntinsPrice }}</div>
 <div>
     <button @click="navigateToWinMuntins" type="button" class="previous">Poprzedni</button>
-    <button @click="setDiffuser" type="button" class="next">Podsumowanie</button>
+    <button @click="setDiffuser" type="button" class="next">Następny</button>
 </div>
 </template>
 
@@ -262,8 +264,7 @@
                     const winDiffusersPrice = winDiffuserPrice(winDiffuser, winMuntinPrice); 
                 this.$store.commit('setDiffuser', winDiffuser);
                 this.$store.commit('setDiffuserPrice', winDiffusersPrice);
-                this.$store.commit('setBasketDisabled');
-                this.$router.push("/summary");                    
+                this.$router.push("/windowBlind");                    
                 }
             },
             navigateToWinMuntins() {
@@ -335,6 +336,12 @@ h3 {
   [type=radio] { 
     padding: 0;
     margin: 0;
+    cursor: pointer;
+}
+  label { 
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
 }
 .diffuserBrand {
     margin: 10px;
@@ -402,5 +409,9 @@ button:hover,
 button:active {
   background-color: #690f0f;
   border-color: #270041;
+}
+.brookvent {
+    padding: 3px;
+    background-color: #f3e0d1;
 }
 </style>

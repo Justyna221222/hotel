@@ -14,49 +14,62 @@
             <td>Rozmiar</td>
             <td>{{ this.$store.state.width }} x {{this.$store.state.height }}</td>
         </tr>
-        <tr>
+        <tr v-if="isVisible">
+            <td>Profil</td>
+            <td>{{ this.$store.state.winProfile }}</td>
+        </tr>
+        <tr v-if="isVisible">
             <td>Okleina</td>
             <td>{{ this.$store.state.winVenner }}</td>
         </tr>
-        <tr>
+        <tr v-if="isVisible">
             <td>Szyba</td>
             <td>{{ this.$store.state.winGlass }}</td>
         </tr>
-        <tr>
+        <tr v-if="isVisible">
             <td>Ciepłe ramki</td>
             <td>{{ this.$store.state.winFrame }}</td>
         </tr>
-        <tr>
+        <tr v-if="isVisible">
             <td>Szprosy</td>
             <td>{{ this.$store.state.winMuntins }}</td>
         </tr>
-        <tr>
+        <tr v-if="isVisible">
             <td>Nawiewniki</td>
             <td>{{ this.$store.state.winDiffuser }}</td>
         </tr>
+        <tr v-if="isVisible">
+            <td>Roleta</td>
+            <td>{{ this.$store.state.winBlind }}</td>
+        </tr>
         <tr>
             <td>Podsumowanie</td>
-            <td>{{ this.$store.state.winDiffuserPrice }}</td>
+            <td>{{ this.$store.state.winBlindPrice }}</td>
         </tr>
         </tbody>
     </table>
     <div>
-        <p class="big">Gratulujemy! Cena Twojego okna jest już obliczona. Jeżeli chcesz ją poznać, wyślemy Ci wiadomość na Twój adres e-mail.</p> 
+        <p class="big">Gratulujemy! Cena Twojego okna jest już obliczona. Jeżeli chcesz ją poznać, wyślemy Ci wiadomość na Twój adres e-mail z obliczonymi specjalnymi RABATAMI !</p> 
         <p class="small">To nie jest zapis na newsletter. Nie będziemy przysyłać Ci żadnych seryjnych wiadomości.</p>      
     </div>
 
 <div>
     <p>E-mail</p>
-    <input id='yourName' type='email' v-model='yourEmail'>
+    <input id='yourName' type='email' v-model='yourEmail' @blur="validateEmail">
+    <p v-if="invalidEmail" class="warning">Wprowadź adres e-mail</p>     
 </div >
 <div class="buttons">
     <div>
         <button @click="sendEmail">Wyślij cenę okna</button>
     </div>
     <div>
-        <button @click="fromBeginning">Oblicz cenę okna jeszcze raz</button>
+        <button @click="addItem">Dodaj kolejną pozycję</button>
+    </div>
+    <div>
+        <button @click="fromBeginning">Oblicz od początku</button>
     </div>
 </div>
+<div>{{this.$store.state.Windows}}</div>
 <div v-if="emailSend" class="emailSend">
     <p>Wiadomość została wysłana, dziękujemy!</p>
 </div>
@@ -73,22 +86,107 @@ export default {
         return {
             yourEmail: '',
             emailSend: false,
-            errSend: false
+            errSend: false,
+            invalidEmail: false,
+            mojeOkna: []
+
         };
     },
+    computed: {
+        isVisible() {
+            const winType = this.$store.state.winType;
+            if(winType == 'Drzwi jednoskrzydłowe 1' || winType == 'Drzwi jednoskrzydłowe 2' || winType == 'Drzwi dwuskrzydłowe PVC') {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    },
     methods: {
+        addItem() {
+            const window = {
+                typ: this.$store.state.winType,
+                szerokość: this.$store.state.width,
+                wysokość: this.$store.state.height,
+                profil: this.$store.state.winProfile,
+                okleina: this.$store.state.winVenner,
+                szyby: this.$store.state.winGlass,
+                ramki: this.$store.state.winFrame,
+                szprosy: this.$store.state.winMuntins,
+                nawiewniki: this.$store.state.winDiffuser,
+                rolety: this.$store.state.winBlind,
+                cena: this.$store.state.winBlindPrice,
+            }
+            console.log(window);
+            console.log(window.typ);
+
+            this.$store.commit('addNewWindow', window);
+ /* Clear store to add new window*/
+            this.$store.state.winType = '',
+            this.$store.state.width = '',
+            this.$store.state.height = '',
+            this.$store.state.winSizePrice = '',            
+            this.$store.state.winArea = '',
+            this.$store.state.winProfile = '',
+            this.$store.state.winProfilePrice = '',
+            this.$store.state.winVenner = '',
+            this.$store.state.winVennerPrice = '',
+            this.$store.state.winGlass = '',
+            this.$store.state.winGlassPrice = '',
+            this.$store.state.winFrame = '',
+            this.$store.state.winFramePrice = '',
+            this.$store.state.winMuntins = '',
+            this.$store.state.winMuntinsPrice = '',
+            this.$store.state.winDiffuser = '',
+            this.$store.state.winDiffuserPrice = '',
+            this.$store.state.winBlind = '',
+            this.$store.state.winBlindPrice = '',
+            this.$store.state.basketDisabled = false
+            this.yourEmail = '',
+            this.$router.push("/windowType");
+        },
         sendEmail() {
+
+            const window = {
+                typ: this.$store.state.winType,
+                szerokość: this.$store.state.width,
+                wysokość: this.$store.state.height,
+                profil: this.$store.state.winProfile,
+                okleina: this.$store.state.winVenner,
+                szyby: this.$store.state.winGlass,
+                ramki: this.$store.state.winFrame,
+                szprosy: this.$store.state.winMuntins,
+                nawiewniki: this.$store.state.winDiffuser,
+                rolety: this.$store.state.winBlind,
+                cena: this.$store.state.winBlindPrice,
+            }
+
+            this.$store.commit('addNewWindow', window);
+
+            if(this.yourEmail == ''){
+                this.invalidEmail = true;
+                return;
+            } else {
+                const Windows = this.$store.state.Windows; 
+
+                var parsed = '';
+                for (let i = 0; i < Windows.length; i++) {
+                 var Okna = Windows[i];
+                    for (var property in Okna) {
+                        parsed += property + ' : ' + Okna[property] + '\r\n' + '<br>';
+                   }
+                   parsed += '<br><br><br>';
+              }
+              
+                this.mojeOkna = parsed;
+
+
+        }
+
 const templateParams = {
-winType: this.$store.state.winType,
-winWidth: this.$store.state.width,
-winHeight: this.$store.state.height,
-winVenner: this.$store.state.winVenner,
-winGlass: this.$store.state.winGlass,
-winFrame: this.$store.state.winFrame,
-winMuntins: this.$store.state.winMuntins,
-winDiffuser: this.$store.state.winDiffuser,
-price: this.$store.state.winDiffuserPrice,
-yourEmail: this.yourEmail
+    Okna: this.mojeOkna,
+    yourEmail: this.yourEmail
+
 };
 emailjs.send('service_u5bo6u3','template_7qaf81v', templateParams, 'Bk9OW_oJI8NKfrxhJ')
 .then((response) => {
@@ -98,25 +196,81 @@ console.log('SUCCESS!', response.status, response.text);
 this.errSend = true;
 console.log('FAILED...', err);
 });
-        },
+
+setTimeout(() => {
+            this.$router.push("/windowType");            
+            this.$store.state.winType = '',
+            this.$store.state.width = '',
+            this.$store.state.height = '',
+            this.$store.state.winSizePrice = '',            
+            this.$store.state.winArea = '',
+            this.$store.state.winProfile = '',
+            this.$store.state.winProfilePrice = '',
+            this.$store.state.winVenner = '',
+            this.$store.state.winVennerPrice = '',
+            this.$store.state.winGlass = '',
+            this.$store.state.winGlassPrice = '',
+            this.$store.state.winFrame = '',
+            this.$store.state.winFramePrice = '',
+            this.$store.state.winMuntins = '',
+            this.$store.state.winMuntinsPrice = '',
+            this.$store.state.winDiffuser = '',
+            this.$store.state.winDiffuserPrice = '',
+            this.$store.state.winBlind = '',
+            this.$store.state.winBlindPrice = '',
+            this.$store.state.basketDisabled = false,
+            this.$store.state.Windows = [],
+            this.yourEmail = ''    
+}, 5000);
+
+
+            },
+
+        validateEmail() {
+                if(this.yourEmail == '') {
+                    this.invalidEmail = true;
+                } else {
+                    this.invalidEmail = false;
+                }
+            }, 
         fromBeginning() {
             this.$store.state.winType = '',
             this.$store.state.width = '',
             this.$store.state.height = '',
+            this.$store.state.winSizePrice = '',            
+            this.$store.state.winArea = '',
+            this.$store.state.winProfile = '',
+            this.$store.state.winProfilePrice = '',
             this.$store.state.winVenner = '',
+            this.$store.state.winVennerPrice = '',
             this.$store.state.winGlass = '',
+            this.$store.state.winGlassPrice = '',
             this.$store.state.winFrame = '',
+            this.$store.state.winFramePrice = '',
             this.$store.state.winMuntins = '',
+            this.$store.state.winMuntinsPrice = '',
             this.$store.state.winDiffuser = '',
             this.$store.state.winDiffuserPrice = '',
-            this.$store.state.basketDisabled = false
+            this.$store.state.winBlind = '',
+            this.$store.state.winBlindPrice = '',
+            this.$store.state.basketDisabled = false,
+            this.$store.state.Windows = [],
             this.yourEmail = '',
             this.$router.push("/windowType");
         }
     },
     beforeRouteEnter(to, from, next){
-                const winDiffuser = store.state.winDiffuser;
-                next(winDiffuser !== '');
+                const winBlind = store.state.winBlind;
+                const winType = store.state.winType;
+                var letIn;
+                if(winBlind == '' && winType == 'Drzwi jednoskrzydłowe 1' || winType == 'Drzwi jednoskrzydłowe 2' || winType == 'Drzwi dwuskrzydłowe PVC') {
+                    letIn = true;
+                } else if(winBlind == '') {
+                    letIn = false;
+                } else {
+                    letIn = true;
+                }         
+                next( letIn);
             }
 }
 </script>
@@ -158,6 +312,7 @@ table {
 }
 button {
   padding: 0.75rem 1.5rem;
+  width: 300px;
   font-family: inherit;
   background-color: #cb2c2c;
   border: 1px solid #3a0061;
@@ -169,5 +324,8 @@ button:hover,
 button:active {
   background-color: #690f0f;
   border-color: #270041;
+}
+.warning {
+    color: red;
 }
 </style>

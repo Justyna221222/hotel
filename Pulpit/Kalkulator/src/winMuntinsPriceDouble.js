@@ -5,11 +5,14 @@ export function winMuntinsPriceDouble(winMuntins, winType, winWidth, winHeight, 
     if(winType == "fix w ramie" || winType == "rozwierne" || winType == "Uchylne" || winType == "Rozwierno-uchylne") {
         muntinArea = 4;
         muntinLength = (winWidth - 0.2) + (winHeight - 0.2);
-    } else if(winType == "Rozwierne + rozwierno-uchylne" || winType == "Rozweirno-uchylne + FIX" || winType == "Stałe FIX + FIX") {
+    } else if(winType == "Rozwierne + rozwierno-uchylne" || winType == "Rozweirno-uchylne + FIX" || winType == "Stałe FIX + FIX" || winType == 'Drzwi PSK + FIX' || winType == 'Drzwi PSK + FIX Perfectherm' || winType == 'Drzwi HS' || winType == 'Uchylne + rozwierno-uchylne') {
         muntinArea = 8;
         muntinLength = (winWidth - 0.2) + (2 * (winHeight - 0.2));
     } else if(winType == "Rozwierne + rozwierne + rozwierno-uchylne" || winType == "Stałe FIX + FIX + FIX") {
         muntinArea = 12;
+        muntinLength = (winWidth - 0.2) + (3 * (winHeight - 0.2));
+    } else if(winType == "Rozwierne + rozwierno-uchylne x 2") {
+        muntinArea = 16;
         muntinLength = (winWidth - 0.2) + (3 * (winHeight - 0.2));
     } else {
        muntinArea = 0;

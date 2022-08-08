@@ -11,8 +11,16 @@
             <td>{{ this.$store.state.winType }}</td>
         </tr>  
         <tr>
-            <td>Rozmiar</td>
-            <td>{{ this.$store.state.width }} x {{this.$store.state.height }}</td>
+            <td>Szerokość</td>
+            <td>{{ this.$store.state.width }}</td>
+        </tr>
+        <tr>
+            <td>Wysokość</td>
+            <td>{{ this.$store.state.height }}</td>
+        </tr>
+        <tr>
+            <td>Profil</td>
+            <td>{{ this.$store.state.winProfile }}</td>
         </tr>
         <tr>
             <td>Okleina</td>
@@ -35,8 +43,12 @@
             <td>{{ this.$store.state.winDiffuser }}</td>
         </tr>
         <tr>
+            <td>Roleta</td>
+            <td>{{ this.$store.state.winBlind }}</td>
+        </tr>
+        <tr>
             <td>Podsumowanie</td>
-            <td>{{ this.$store.state.winDiffuserPrice }}</td>
+            <td>{{ this.$store.state.winBlindPrice }}</td>
         </tr>
         </tbody>
     </table>

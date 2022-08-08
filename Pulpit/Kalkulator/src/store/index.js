@@ -7,6 +7,8 @@ const appStore = createStore({
             height: '',
             winArea: '',
             winSizePrice: '',
+            winProfile: '',
+            winProfilePrice: '',
             winType: '',
             winGlass: '',
             winColor: '',
@@ -19,7 +21,10 @@ const appStore = createStore({
             winMuntinsPrice: '',
             winDiffuser: '',
             winDiffuserPrice: '',
-            basketDisabled: false
+            winBlind: '',
+            winBlindPrice: '',
+            basketDisabled: false,
+            Windows: []
         };
     },
     mutations: {
@@ -28,6 +33,12 @@ const appStore = createStore({
         },
         setHeight(state, height) {
             state.height = height;
+        },
+        setWinProfile(state, profile) {
+            state.winProfile = profile;
+        },
+        setWinProfilePrice(state, profilePrice) {
+            state.winProfilePrice = profilePrice;
         },
         setWinArea(state, winArea) {
             state.winArea = winArea;
@@ -71,8 +82,17 @@ const appStore = createStore({
         setDiffuserPrice(state, winDiffusersPrice) {
             state.winDiffuserPrice = winDiffusersPrice;
         },
+        setWinBlind(state, winBlind) {
+            state.winBlind = winBlind;
+        },
+        setWinBlindPrice(state, winBlindPrice) {
+            state.winBlindPrice = winBlindPrice;
+        },
         setBasketDisabled(state) {
             state.basketDisabled = true;
+        },
+        addNewWindow(state, window) {
+            state.Windows.push(window);
         }
     },
     actions: {
