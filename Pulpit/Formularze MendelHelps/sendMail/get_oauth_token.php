@@ -141,7 +141,7 @@ switch ($providerName) {
         ];
         break;
     case 'Azure':
-        //$params['tenantId'] = $tenantId;
+        $params['tenantId'] = $tenantId;
 
         $provider = new Azure($params);
         $options = [
