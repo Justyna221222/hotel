@@ -80,16 +80,16 @@ require_once 'class-db.php';
 
 session_start();
 
-$providerName = '';
+$providerName = 'Google';
 $clientId = '761050550533-3a79as7goii91hm9lf2dor77hljr0rqe.apps.googleusercontent.com';
 $clientSecret = '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';
-//$tenantId = '';
+$tenantId = '';
 
 if (array_key_exists('provider', $_POST)) {
     $providerName = $_POST['provider'];
     $clientId = $_POST['clientId'];
     $clientSecret = $_POST['clientSecret'];
-    //$tenantId = $_POST['tenantId'];
+    $tenantId = $_POST['tenantId'];
     $_SESSION['provider'] = $providerName;
     $_SESSION['clientId'] = $clientId;
     $_SESSION['clientSecret'] = $clientSecret;

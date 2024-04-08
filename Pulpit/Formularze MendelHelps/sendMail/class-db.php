@@ -1,9 +1,9 @@
 <?php
 class DB {
-    private $dbHost     = "";
-    private $dbUsername = "";
-    private $dbPassword = "";
-    private $dbName     = "";
+    private $dbHost     = "localhost";
+    private $dbUsername = "codewith_companies";
+    private $dbPassword = "Justynajarek123!";
+    private $dbName     = "oauth_tokens";
 
     public function __construct(){
         if(!isset($this->db)){
