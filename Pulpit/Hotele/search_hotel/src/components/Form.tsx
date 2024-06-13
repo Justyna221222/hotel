@@ -9,8 +9,10 @@ import {FIVE_PHOTOS_ALLOWED} from "./Form.constants";
 import "yup-phone";
 import { InferredFormData, SignupSchema } from "./validation/signInForm";
 import axios from "axios";
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 export const Form: React.FC = () => {
+//export const Form = () => {
   const {
     register,
     control,
@@ -20,15 +22,28 @@ export const Form: React.FC = () => {
     resolver: yupResolver(SignupSchema),
   });
   const [uploadedFiles, setUploadedFiles] = useState<File[]>();
-  const onSubmit = async (data:InferredFormData) => {
-    axios.post("../upload.php", data, {})
-    try {
-    } catch(e) {
-    }
-  };
-  const onError = () => {
-    console.log("Wrong");
-  }
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const mutation = useMutation({
+    mutationFn: (data:any) => {
+      return axios.post("../upload.php", data)
+  },});
+   const onSubmit = async (data:InferredFormData) => {
+    // const { isPending, error, isError } = useQuery({ queryKey: ['hotelForm'], queryFn: () =>
+    // axios
+    // .post("../upload.php", data, {})})
+    // if (isPending) return 'Loading...'
+
+    // if (isError) {
+    //   setErrorMessage(`An error has occurred: ${error.message}`);
+    // }
+
+  //  };
+  // const onError = () => {
+  //   console.log("Wrong");
+  // }
+ };
+const onError = () => {
+  console.log("Wrong");
 
   const handleUploadFiles = (photoFiles: File[]) => {
     console.log(photoFiles.length);
@@ -112,8 +127,28 @@ export const Form: React.FC = () => {
           </>
         )}
         <input type="submit" />
+        <div>
+          {mutation.isPending ? (
+            'Adding hotel...'
+          ) : (
+            <>
+              {mutation.isError ? (
+                <div>An error occurred: {mutation.error.message}</div>
+              ) : null}
+
+              {mutation.isSuccess ? <div>Hotel added!</div> : null}
+
+              <button
+                onClick={() => {
+                  mutation.mutate({ id: new Date(), title: 'Nowy Hotel' })
+                }}
+              >
+                Zapisz hotel
+              </button>
+            </>
+          )}
+        </div>
       </form>
-      <DevTool control={control} />
     </div>
   );
-};
+}};
